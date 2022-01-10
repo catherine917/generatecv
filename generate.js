@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as R from 'ramda';
 import docx from "docx";
 
 const {
@@ -19,24 +20,26 @@ const {
 } = docx;
 
 fs.readFile('./input.json', 'utf-8', function (err, data) {
-    if (err) {
-        conslog.error(err);
-    }
-    let res = JSON.parse(data);
-    const cv = createCV(res.name, res.email, res.phone, res.photo, res.currentJob, res.workExperience);
-    Packer.toBuffer(cv).then((buffer) => {
-        fs.writeFileSync(`${res.name}.docx`, buffer);
+        if (err) {
+            conslog.error(err);
+        }
+        let res = JSON.parse(data);
+        let { name, email, phone, photo, currentJob, workExperience, education } = res;
+        const cv = createCV(name, email, phone, photo, currentJob, workExperience, education);
+        Packer.toBuffer(cv).then((buffer) => {
+            fs.writeFileSync(`${res.name}.docx`, buffer);
+        });
     });
-});
 
-function createCV(name, email, phone, photo, currentJob, workExperience) {
+function createCV(name, email, phone, photo, currentJob, workExperience, education) {
     let current = {
         startTitle: currentJob.jobTitle,
         startDate: currentJob.startDate,
         endDate: null,
         employer: currentJob.companyNav.name
-    }
+    };
     workExperience.splice(0, 0, current);
+    let educations = handldEducation(education);
     const document = new Document({
         sections: [
             {
@@ -57,7 +60,22 @@ function createCV(name, email, phone, photo, currentJob, workExperience) {
 
                             return arr;
                         })
-                        .reduce((prev, curr) => prev.concat(curr), [])
+                        .reduce((prev, curr) => prev.concat(curr), []),
+                    createHeading("Education"),
+                    ...educations
+                        .map((education) => {
+                            const arr = [];
+                            arr.push(
+                                createInstitutionHeader(
+                                    education.school,
+                                    createPositionDateText(education.startDate, education.endDate),
+                                ),
+                            );
+                            arr.push(createRoleText(`${education.major} - ${education.degree}`));
+                            return arr;
+                        })
+                        .reduce((prev, curr) => prev.concat(curr), []),
+
                 ],
             },
         ],
@@ -67,15 +85,25 @@ function createCV(name, email, phone, photo, currentJob, workExperience) {
 
 }
 
-function createContactInfo(phone, email) {
+function handldEducation(education) {
+    let res = [];
+    for (let e of education) {
+        let o = R.pick(['startDate', 'endDate', 'school', 'majorNav', 'degreeNav'], e);
+        o.major = R.replace('major_', '', o.majorNav.mdfExternalCode);
+        o.degree = R.replace('degree_', '', o.degreeNav.mdfExternalCode);
+        res.push(o);
+    }
+    return res;
+}
+
+function createContactInfo(email, phone) {
     return new Paragraph({
         alignment: AlignmentType.CENTER,
         children: [
-            new TextRun({ text: `Mobile: ${phone}  |  Email: ${email}`, heading: HeadingLevel.HEADING_3 }),
-            // new TextRun({ text: `Email: ${email}`, break: 1, heading: HeadingLevel.HEADING_3 })
+            new TextRun({ text: `Mobile: ${phone}  |  Email: ${email}`, heading: HeadingLevel.HEADING_3 })
         ],
         spacing: {
-            line: 200,
+            before: 400,
         },
     });
 }
@@ -130,9 +158,6 @@ function createTableLayout(name, email, phone, photo) {
         width: {
             size: 100,
             type: WidthType.PERCENTAGE,
-        },
-        spacing: {
-            after: 1000,
         }
     });
 }
@@ -142,6 +167,9 @@ function createHeading(text) {
         text: text,
         heading: HeadingLevel.HEADING_1,
         thematicBreak: true,
+        spacing: {
+            before: 600
+        }
     });
 }
 
@@ -163,6 +191,10 @@ function createInstitutionHeader(institutionName, dateText) {
                 bold: true,
             }),
         ],
+        spacing: {
+            before: 200,
+            after: 200
+        }
     });
 }
 
@@ -220,7 +252,7 @@ function createRoleText(roleText) {
                 text: roleText,
                 italics: true,
             }),
-        ],
+        ]
     });
 }
 

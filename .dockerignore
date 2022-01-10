@@ -1,0 +1,7 @@
+.git
+node_modules/
+yarn-error.log
+input.json
+fetchData.js
+*.md
+*.docx
