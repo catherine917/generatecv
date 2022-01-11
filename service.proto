@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+package generatecv;
+
+
+message Job {
+    string jobTitle = 1;
+    string startDate = 2;
+    message CompanyNav {
+        string name = 3;
+    }
+}
+
+message Experience {
+    string startTitle = 1;
+    string startDate = 2;
+    string endDate = 3;
+    string employer = 4;
+}
+
+message Education {
+    string startDate = 1;
+    string endDate = 2;
+    string school = 3;
+    message MajorNav {
+        string mdfExternalCode = 4;
+    }
+    message DegreeNav {
+        string mdfExternalCode = 5;
+    }
+}
+
+message PersonProfile {
+  string name = 1 ;
+  string email = 2;
+  string phone = 3;
+  string photo = 4;
+  Job currentJob = 5;
+  repeated Experience workExperience = 6;
+  repeated Education education = 7;
+}
+
+message File {
+    string file = 1;
+}
+
+service GenerateService {
+  rpc GenerateCV(PersonProfile) returns (File) {
+    option (google.api.http) = {
+      post: "/generate",
+      body: "*",
+    };
+  }
+}

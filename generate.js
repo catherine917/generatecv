@@ -20,18 +20,17 @@ const {
 } = docx;
 
 fs.readFile('./input.json', 'utf-8', function (err, data) {
-        if (err) {
-            conslog.error(err);
-        }
-        let res = JSON.parse(data);
-        let { name, email, phone, photo, currentJob, workExperience, education } = res;
-        const cv = createCV(name, email, phone, photo, currentJob, workExperience, education);
-        Packer.toBuffer(cv).then((buffer) => {
-            fs.writeFileSync(`${res.name}.docx`, buffer);
-        });
+    if (err) {
+        conslog.error(err);
+    }
+    let res = JSON.parse(data);
+    let { name, email, phone, photo, currentJob, workExperience, education } = res;
+    const cv = createCV(name, email, phone, photo, currentJob, workExperience, education);
+    Packer.toBuffer(cv).then((buffer) => {
+        fs.writeFileSync(`${res.name}.docx`, buffer);
     });
-
-function createCV(name, email, phone, photo, currentJob, workExperience, education) {
+});
+export function createCV(name, email, phone, photo, currentJob, workExperience, education) {
     let current = {
         startTitle: currentJob.jobTitle,
         startDate: currentJob.startDate,
