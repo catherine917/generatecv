@@ -5,7 +5,6 @@ const {
     AlignmentType,
     Document,
     HeadingLevel,
-    Packer,
     Paragraph,
     TabStopPosition,
     TabStopType,
@@ -29,7 +28,8 @@ const {
 //         fs.writeFileSync(`${res.name}.docx`, buffer);
 //     });
 // });
-export function createCV(name, email, phone, photo, currentJob, workExperience, education) {
+export function createCV(name, email, phoneNumber, countryCode, photo, currentJob, workExperience, education) {
+    let phone = `(${countryCode}) ${phoneNumber}`;
     let current = {
         startTitle: currentJob.jobTitle,
         startDate: currentJob.startDate,
