@@ -1,7 +1,7 @@
-FROM node:12 AS build
+FROM node:12-alpine AS build
 
 WORKDIR /
 COPY . .
-RUN yarn install
+RUN npm install
 EXPOSE 3000
 CMD ["node","main.js"]
