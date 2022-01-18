@@ -38,11 +38,12 @@ message Education {
 message PersonProfile {
   string name = 1 ;
   string email = 2;
-  string phone = 3;
-  string photo = 4;
-  Job currentJob = 5;
-  repeated Experience workExperience = 6;
-  repeated Education education = 7;
+  string countryCode = 3;
+  string phoneNumber = 4;
+  string photo = 5;
+  Job currentJob = 6;
+  repeated Experience workExperience = 7;
+  repeated Education education = 8;
 }
 
 message File {
