@@ -34,16 +34,19 @@ message Education {
     MajorNav majorNav = 4;
     DegreeNav degreeNav = 5;
 }
-
-message PersonProfile {
+message BasicInfo {
   string name = 1 ;
   string email = 2;
   string countryCode = 3;
   string phoneNumber = 4;
-  string photo = 5;
-  Job currentJob = 6;
-  repeated Experience workExperience = 7;
-  repeated Education education = 8;
+}
+
+message PersonProfile {
+  BasicInfo basicInfo = 1;
+  string photo = 2;
+  Job currentJob = 3;
+  repeated Experience workExperience = 4;
+  repeated Education education = 5;
 }
 
 message File {

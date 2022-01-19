@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import * as fs from "fs";
 import docx from "docx";
 
 const {
@@ -14,7 +15,8 @@ const {
     TableRow,
     TableCell,
     WidthType,
-    BorderStyle
+    BorderStyle,
+    Packer
 } = docx;
 
 // fs.readFile('./input.json', 'utf-8', function (err, data) {
@@ -22,14 +24,16 @@ const {
 //         console.error(err);
 //     }
 //     let res = JSON.parse(data);
-//     let { name, email, phone, photo, currentJob, workExperience, education } = res;
-//     const cv = createCV(name, email, phone, photo, currentJob, workExperience, education);
+//     let { basicInfo, photo, currentJob, workExperience, education } = res;
+//     const cv = createCV(basicInfo, photo, currentJob, workExperience, education);
 //     Packer.toBuffer(cv).then((buffer) => {
-//         fs.writeFileSync(`${res.name}.docx`, buffer);
+//         fs.writeFileSync(`${basicInfo.personalInfoNav.results[0].formalName}.docx`, buffer);
 //     });
 // });
-export function createCV(name, email, phoneNumber, countryCode, photo, currentJob, workExperience, education) {
-    let phone = `(${countryCode}) ${phoneNumber}`;
+export function createCV(basicInfo, photo, currentJob, workExperience, education) {
+    let name = basicInfo.personalInfoNav.results[0].formalName;
+    let email = basicInfo.emailNav.results[0].emailAddress;
+    let phone = `(${basicInfo.phoneNav.results[0].countryCode}) ${basicInfo.phoneNav.results[0].phoneNumber}`;
     let current = {
         startTitle: currentJob.jobTitle,
         startDate: currentJob.startDate,
