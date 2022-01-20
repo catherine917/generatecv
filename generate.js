@@ -27,13 +27,13 @@ const {
 //     let { basicInfo, photo, currentJob, workExperience, education } = res;
 //     const cv = createCV(basicInfo, photo, currentJob, workExperience, education);
 //     Packer.toBuffer(cv).then((buffer) => {
-//         fs.writeFileSync(`${basicInfo.personalInfoNav.results[0].formalName}.docx`, buffer);
+//         fs.writeFileSync(`${basicInfo.defaultFullName}.docx`, buffer);
 //     });
 // });
 export function createCV(basicInfo, photo, currentJob, workExperience, education) {
-    let name = basicInfo.personalInfoNav.results[0].formalName;
-    let email = basicInfo.emailNav.results[0].emailAddress;
-    let phone = `(${basicInfo.phoneNav.results[0].countryCode}) ${basicInfo.phoneNav.results[0].phoneNumber}`;
+    let name = basicInfo.defaultFullName;
+    let email = basicInfo.email;
+    let phone = basicInfo.businessPhone;
     let current = {
         startTitle: currentJob.jobTitle,
         startDate: currentJob.startDate,
