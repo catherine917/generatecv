@@ -11,9 +11,19 @@ const { Packer } = docx;
 
 app.use(bodyParser());
 router.post('/generate', async function (ctx) {
-    const cv = createCV(...ctx.request.body);
-    let buffer = await Packer.toBuffer(cv);
-    ctx.body = buffer;
+    try {
+        console.log("Start generate service");
+        let body = ctx.request.body;
+        const cv = createCV(body.basicInfo, body.photo, body.currentJob, body.workExperience, body.education);
+        let base64 = await Packer.toBase64String(cv);
+        ctx.body = { resume: base64 };
+        ctx.status = 200;
+        console.log("Get CV");
+    } catch (e) {
+        console.error(e);
+        ctx.status = 500;
+        ctx.body = "Error: " + e.message
+    }
 });
 
 app.use(router.routes()).use(router.allowedMethods());

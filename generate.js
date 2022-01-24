@@ -34,12 +34,14 @@ export function createCV(basicInfo, photo, currentJob, workExperience, education
     let name = basicInfo.defaultFullName;
     let email = basicInfo.email;
     let phone = basicInfo.businessPhone;
+    console.log(`Get name, email, phone from request: ${name}, ${email}, ${phone}`);
     let current = {
         startTitle: currentJob.jobTitle,
         startDate: currentJob.startDate,
         endDate: null,
         employer: currentJob.companyNav.name
     };
+    console.log(`Current Job is ${currentJob.jobTitle}`);
     workExperience.splice(0, 0, current);
     let educations = handldEducation(education);
     const document = new Document({

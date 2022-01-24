@@ -50,8 +50,13 @@ message PersonProfile {
 }
 
 message File {
-    string file = 1;
+    Resume file = 1;
 }
+
+message Resume {
+  string resume = 1;
+}
+
 
 service GenerateService {
   rpc GenerateCV(PersonProfile) returns (File) {
