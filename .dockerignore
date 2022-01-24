@@ -5,3 +5,5 @@ input.json
 fetchData.js
 *.md
 *.docx
+mock-server/
+ubuntu@124.223.75.252/

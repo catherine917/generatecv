@@ -5,3 +5,5 @@ package-lock.json
 node_modules/
 *.docx
 temp/
+mock-server/
+ubuntu@124.223.75.252

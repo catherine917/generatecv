@@ -11,8 +11,7 @@ const { Packer } = docx;
 
 app.use(bodyParser());
 router.post('/generate', async function (ctx) {
-    let { basicInfo, photo, currentJob, workExperience, education } = ctx.request.body;
-    const cv = createCV(basicInfo, photo, currentJob, workExperience, education);
+    const cv = createCV(...ctx.request.body);
     let buffer = await Packer.toBuffer(cv);
     ctx.body = buffer;
 });
