@@ -50,7 +50,7 @@ message PersonProfile {
 }
 
 message File {
-    Resume file = 1;
+    Resume resume = 1;
 }
 
 message Resume {
